@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    @apply mx-0 my-0 py-0 bg-stone-100;
+  }
+  body {
+    @apply m-0 p-0 py-0 my-0;
+  }
+}
+
+:root,
+html,
+body {
+  margin-block: 0;
+  padding-block: 0;
+}
