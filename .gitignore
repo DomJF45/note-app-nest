@@ -29,3 +29,6 @@ docker-compose.yml
 # Ignore local development files
 .vscode/
 .idea/
+
+#ignore server git
+server/.git/
