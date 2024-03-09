@@ -1,0 +1,31 @@
+.DS_Store
+
+# Ignore Node.js related files and directories
+node_modules/
+npm-debug.log
+
+# Ignore compiled TypeScript files
+/dist/
+
+# Ignore the client build directory if applicable
+/client/build/
+
+# Ignore the Docker-related files
+docker-compose.prod.yml
+docker-compose.yml
+
+# Ignore the PostgreSQL data directory
+/pgdata/
+
+# Ignore any sensitive files (e.g., environment configuration files with secrets)
+.env
+
+# Ignore logs and other generated files
+*.log
+*.json
+*.sqlite
+*.pem
+
+# Ignore local development files
+.vscode/
+.idea/
