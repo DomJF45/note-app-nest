@@ -54,6 +54,7 @@ const AddNote: AddNoteComponent = ({ handleAddNote }) => {
                   if (value.length < 20 || value.length > 300) {
                     return "Must be between 20 and 300 characters";
                   }
+                  return true;
                 },
               })}
               autoFocus

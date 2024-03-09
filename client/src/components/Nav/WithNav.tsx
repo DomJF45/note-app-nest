@@ -5,7 +5,7 @@ export function WithNav() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col gap-5 px-12 py-6">
+      <div className="flex flex-col gap-5 px-5 sm:px-12 py-6">
         <Outlet />
       </div>
     </>

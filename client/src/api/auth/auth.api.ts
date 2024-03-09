@@ -1,11 +1,8 @@
 import axios from "axios";
-import type { iUser } from "../../types/user.types";
-import { API_URL } from "../constants";
+import type { iLoginUser, iRegisterUser, iUser } from "../../types/user.types";
+import { API_URL, axiosOptions, getToken } from "../constants";
 
-export async function login(data: {
-  email: string;
-  password: string;
-}): Promise<void> {
+export async function login(data: iLoginUser): Promise<void> {
   const { email, password } = data;
   const res = await axios.post(`${API_URL}/auth/login`, {
     email,
@@ -15,13 +12,14 @@ export async function login(data: {
   localStorage.setItem("token", res.data.token);
 }
 
+export async function registerUser(data: iRegisterUser) {
+  const res = await axios.post(`${API_URL}/auth/register`, data);
+  if (!res) throw new Error();
+  localStorage.setItem("token", res.data.token);
+}
+
 export async function getProfile(): Promise<iUser> {
-  const token = localStorage.getItem("token");
-  if (!token) throw new Error("Unauthorized");
-  const res = await axios.get(`${API_URL}/auth/profile`, {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+  const token = getToken();
+  const res = await axios.get(`${API_URL}/auth/profile`, axiosOptions(token));
   return res.data.user;
 }

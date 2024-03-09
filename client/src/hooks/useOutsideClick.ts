@@ -2,10 +2,15 @@ import { useEffect } from "react";
 
 interface UseOutsideClickProps {
   targetRefs: React.RefObject<HTMLElement>[];
+  exceptions?: React.RefObject<HTMLElement>[];
   callback: () => void;
 }
 
-const useOutsideClick = ({ targetRefs, callback }: UseOutsideClickProps) => {
+const useOutsideClick = ({
+  targetRefs,
+  exceptions = [],
+  callback,
+}: UseOutsideClickProps) => {
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       const anyTrueRefs = targetRefs.some((tr) => tr.current);
@@ -13,7 +18,13 @@ const useOutsideClick = ({ targetRefs, callback }: UseOutsideClickProps) => {
         anyTrueRefs &&
         !targetRefs.some((tr) => tr.current?.contains(e.target as Node))
       ) {
-        callback();
+        const isException = exceptions.some(
+          (exRef) =>
+            exRef.current && exRef.current.contains(event?.target as Node)
+        );
+        if (!isException) {
+          callback();
+        }
       }
     };
 
@@ -21,7 +32,7 @@ const useOutsideClick = ({ targetRefs, callback }: UseOutsideClickProps) => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [callback, targetRefs]);
+  }, [callback, targetRefs, exceptions]);
 };
 
 export default useOutsideClick;

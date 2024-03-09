@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 const Navbar: NavBarComponent = () => {
   const { user, handleLogout } = useAuth();
   return (
-    <div className="bg-white sticky top-0 left-0 w-full h-[60px] px-12 border-b-[1px] border-slate-300 z-[3]">
+    <div className="bg-white sticky top-0 left-0 w-full h-[60px] px-5 sm:px-12 border-b-[1px] border-slate-300 z-[3]">
       <div className="flex flex-row justify-between items-center h-full">
         <div>
           <h1 className="font-bold text-2xl flex gap-1 items-end">

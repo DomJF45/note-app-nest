@@ -10,6 +10,7 @@ import { Input } from "./Input";
 import Spinner from "../../components/Spinner/Spinner";
 import type { iUser } from "../../types/user.types";
 import { login } from "../../api/auth/auth.api";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   email: z.string(),
@@ -25,9 +26,20 @@ export default function LoginPage() {
     setShowPass((prev) => !prev);
   };
 
-  const mutation = useMutation((data: Pick<iUser, "email" | "password">) => {
-    return login(data);
-  });
+  const mutation = useMutation(
+    (data: Pick<iUser, "email" | "password">) => {
+      return login(data);
+    },
+    {
+      onSuccess: () => {
+        navigate("/notes");
+        toast.success("Logged in!");
+      },
+      onError: () => {
+        toast.error("Error logging in");
+      },
+    }
+  );
 
   const {
     register,
@@ -45,16 +57,11 @@ export default function LoginPage() {
     mutation.mutate(data);
   };
 
-  if (mutation.isSuccess) {
-    navigate("/notes");
-    mutation.reset();
-  }
-
   return (
     <>
       <h1 className="text-3xl mb-10">Login to start saving notes</h1>
       <form
-        className="flex flex-col gap-5 w-[50%]"
+        className="flex flex-col gap-5 w-full md:w-[50%]"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col">
