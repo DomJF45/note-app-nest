@@ -111,7 +111,7 @@ const Note: NoteComponent = ({ note }) => {
               autoFocus
               ref={inputRef}
               value={noteUpdate}
-              className="border-1 border-slate-300 rounded w-full"
+              className="border-1 border-slate-300 rounded w-full h-full"
               onChange={(e) => setNoteUpdate(e.currentTarget.value)}
             />
             <div className="flex gap-2 items-center">
