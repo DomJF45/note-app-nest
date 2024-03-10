@@ -11,11 +11,12 @@ import Spinner from "../../components/Spinner/Spinner";
 import type { iUser } from "../../types/user.types";
 import { login } from "../../api/auth/auth.api";
 import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 // zod validation schema
 const schema = z.object({
-  email: z.string(),
-  password: z.string(),
+  email: z.string().email({ message: "must be a valid email" }).trim(),
+  password: z.string().trim(),
 });
 
 // infer schema type, apply to FormFields for useForm
@@ -42,8 +43,14 @@ export default function LoginPage() {
         toast.success("Logged in!");
       },
       // if not successful, show error in toast
-      onError: () => {
-        toast.error("Error logging in");
+      onError: (
+        err: AxiosError<{ message: string; error: string; statusCode: number }>
+      ) => {
+        toast.error("Error logging in!");
+        setError("root", {
+          type: "manual",
+          message: err.response?.data.message,
+        });
       },
     }
   );
@@ -52,6 +59,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
@@ -63,7 +71,17 @@ export default function LoginPage() {
 
   // submit handler for login form
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    mutation.mutate(data);
+    try {
+      mutation.mutate(data);
+    } catch (err: unknown) {
+      toast("Error loggin in!");
+      if (err instanceof AxiosError) {
+        setError("root", {
+          type: "manual",
+          message: err.response?.data,
+        });
+      }
+    }
   };
 
   return (
@@ -76,10 +94,15 @@ export default function LoginPage() {
         <div className="flex flex-col">
           <label>Email</label>
           <Input
-            {...register("email")}
+            {...register("email", {
+              required: "email is required",
+            })}
             type="email"
             placeholder="example@mail.com"
           />
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-3">
@@ -90,10 +113,15 @@ export default function LoginPage() {
           </div>
 
           <Input
-            {...register("password")}
+            {...register("password", {
+              required: "password is required",
+            })}
             type={showPass ? "text" : "password"}
             placeholder="password"
           />
+          {errors.password && (
+            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          )}
         </div>
         <button className="bg-emerald-600 text-white px-4 py-2 rounded text-sm flex justify-center">
           {isSubmitting ? <Spinner /> : <p>Login</p>}

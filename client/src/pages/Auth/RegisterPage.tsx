@@ -1,23 +1,53 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import z from "zod";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
-import { Input } from "./Input";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PASS_REGEX, USERNAME_REGEX } from "./constants";
 import { useMutation } from "react-query";
-import { iRegisterUser } from "../../types/user.types";
+import { Input } from "./Input";
+import { PASS_REGEX, USERNAME_REGEX } from "./constants";
+import type { iRegisterUser } from "../../types/user.types";
 import { registerUser } from "../../api/auth/auth.api";
-import toast from "react-hot-toast";
+import Spinner from "../../components/Spinner/Spinner";
+import { AxiosError } from "axios";
 
 // zod schema for registering user
-const schema = z.object({
-  username: z.string().trim(),
-  email: z.string().email().trim(),
-  password: z.string().trim(),
-  confirmPass: z.string().trim(),
-});
+const schema = z
+  .object({
+    username: z
+      .string()
+      .regex(USERNAME_REGEX, {
+        message:
+          "must be between 3 and 28 characters and contain no spaces or special characters",
+      })
+      .trim(),
+    email: z.string().email({ message: "must be a valid email" }).trim(),
+    password: z
+      .string()
+      .regex(PASS_REGEX, {
+        message:
+          "Password must be at least 6 characters, contain: 1 uppercase, 1 lowercase, 1 digit, and 1 special char (#?!@%) ",
+      })
+      .trim(),
+    confirmPass: z
+      .string()
+      .regex(PASS_REGEX, {
+        message:
+          "Password must be at least 6 characters, contain: 1 uppercase, 1 lowercase, 1 digit, and 1 special char (#?!@%) ",
+      })
+      .trim(),
+  })
+  .superRefine(({ confirmPass, password }, ctx) => {
+    if (confirmPass !== password) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Passwords do not match",
+      });
+    }
+  });
 
 // apply schema type to useForm form
 type FormFields = z.infer<typeof schema>;
@@ -41,9 +71,15 @@ export default function RegisterPage() {
         toast.success("Created account!");
         navigate("/notes");
       },
-      onError: () => {
+      onError: (
+        err: AxiosError<{ message: string; error: string; statusCode: number }>
+      ) => {
         // if error, display error in toast
         toast.error("Error creating account");
+        setError("root", {
+          type: "manual",
+          message: err.response?.data.message,
+        });
       },
     }
   );
@@ -53,7 +89,8 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
       username: "",
@@ -66,14 +103,25 @@ export default function RegisterPage() {
 
   // checks if password = confirmPassword, then registers user
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    if (watch("password") !== watch("confirmPass")) return;
-    // mutate register user
-    const newUser: iRegisterUser = {
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    };
-    registerMutation.mutate(newUser);
+    try {
+      if (watch("password") !== watch("confirmPass")) {
+        setError("password", new Error("Passwords must match"));
+      }
+      // mutate register user
+      const newUser: iRegisterUser = {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      };
+      registerMutation.mutate(newUser);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        setError("root", {
+          type: "manual",
+          message: err?.response?.data,
+        });
+      }
+    }
   };
 
   return (
@@ -88,16 +136,14 @@ export default function RegisterPage() {
           <Input
             {...register("username", {
               required: "Username is required",
-              validate: (value: string) => {
-                if (!USERNAME_REGEX.test(value)) {
-                  return "Username must be between 3 and 28 characters, and contain no spaces or special characters";
-                }
-                return false;
-              },
+              pattern: USERNAME_REGEX,
             })}
             type="text"
             placeholder="coolperson20"
           />
+          {errors.username && (
+            <p className="text-red-500 text-xs">{errors.username.message}</p>
+          )}
         </div>
         <div className="flex flex-col ">
           <label>Email</label>
@@ -108,6 +154,9 @@ export default function RegisterPage() {
             type="email"
             placeholder="example@mail.com"
           />
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-3">
@@ -121,19 +170,16 @@ export default function RegisterPage() {
             {...register("password", {
               required: "Password is required",
               min: 6,
-              validate: (value) => {
-                if (!PASS_REGEX.test(value)) {
-                  return "Minimum of 6 characters, 1 number, 1 uppercase, and 1 special character (#?!@$%^&*-)";
-                }
-              },
+              pattern: PASS_REGEX,
             })}
             type={passType}
             placeholder="password"
           />
+          {errors.password && (
+            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          )}
         </div>
-        {errors.password && (
-          <p className="text-red-500 text-xs">{errors.password.message}</p>
-        )}
+
         <div className="flex flex-col">
           <div className="flex items-center gap-3">
             <label>Confirm Password</label>
@@ -144,24 +190,23 @@ export default function RegisterPage() {
           <Input
             {...register("confirmPass", {
               required: "You must confirm your password",
-              validate: (value: string) => {
-                if (watch("password") !== value) {
-                  return "passwords must match";
-                }
-                return true;
-              },
             })}
             type={passType}
             placeholder="password"
           />
           {errors.confirmPass && (
-            <p className="text-red-500">{errors.confirmPass.message}</p>
+            <p className="text-red-500 text-xs">{errors.confirmPass.message}</p>
           )}
         </div>
-        <button className="bg-emerald-600 text-white px-4 py-2 rounded text-sm">
-          Sign In
+        <button
+          type="submit"
+          className="bg-emerald-600 text-white px-4 py-2 rounded text-sm"
+        >
+          {isSubmitting ? <Spinner /> : <p>Login</p>}
         </button>
-        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
+        {errors.root && (
+          <p className="text-red-500 text-xs">{errors.root.message}</p>
+        )}
         <p className="w-full">
           Already have an account?{" "}
           <Link className="text-emerald-600" to={"/auth/login"}>
