@@ -1,10 +1,14 @@
+import { useNoteActions, useNoteFilter } from "../../store/note.store";
 import type { FilterBarComponent } from "./types";
 
-const FilterBar: FilterBarComponent = ({ noteFilter, setNoteFilter }) => {
+const FilterBar: FilterBarComponent = () => {
+  const noteFilter = useNoteFilter();
+  const { setNoteFilter } = useNoteActions();
+
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(noteFilter);
     setNoteFilter(e.currentTarget.value);
   };
+
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm">Search:</label>

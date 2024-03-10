@@ -10,10 +10,6 @@ npm-debug.log
 # Ignore the client build directory if applicable
 /client/build/
 
-# Ignore the Docker-related files
-docker-compose.prod.yml
-docker-compose.yml
-
 # Ignore the PostgreSQL data directory
 /pgdata/
 
@@ -29,6 +25,3 @@ docker-compose.yml
 # Ignore local development files
 .vscode/
 .idea/
-
-#ignore server git
-server/.git/

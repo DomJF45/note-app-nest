@@ -12,35 +12,43 @@ import type { iUser } from "../../types/user.types";
 import { login } from "../../api/auth/auth.api";
 import toast from "react-hot-toast";
 
+// zod validation schema
 const schema = z.object({
   email: z.string(),
   password: z.string(),
 });
 
+// infer schema type, apply to FormFields for useForm
 type FormFields = z.infer<typeof schema>;
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  // state for showing password
   const [showPass, setShowPass] = useState<boolean>(false);
+  // toggles on/off for showing password
   const togglePass = () => {
     setShowPass((prev) => !prev);
   };
 
+  // mutation that logs user in
   const mutation = useMutation(
     (data: Pick<iUser, "email" | "password">) => {
       return login(data);
     },
     {
+      // if successful, redirect to notes and displays toast
       onSuccess: () => {
         navigate("/notes");
         toast.success("Logged in!");
       },
+      // if not successful, show error in toast
       onError: () => {
         toast.error("Error logging in");
       },
     }
   );
 
+  // form made with useForm, allows for better form control and validation
   const {
     register,
     handleSubmit,
@@ -53,6 +61,7 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   });
 
+  // submit handler for login form
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     mutation.mutate(data);
   };

@@ -3,11 +3,11 @@ import { HiChevronDown, HiCheck } from "react-icons/hi";
 import { Fragment } from "react";
 import { FilterDropDownComponent } from "./types";
 import { DATE_OPTIONS } from "./constants";
+import { useDateFilter, useNoteActions } from "../../store/note.store";
 
-const FilterDropDown: FilterDropDownComponent = ({
-  dateFilter,
-  setDateFilter,
-}) => {
+const FilterDropDown: FilterDropDownComponent = () => {
+  const dateFilter = useDateFilter();
+  const { setDateFilter } = useNoteActions();
   return (
     <Listbox value={dateFilter} onChange={setDateFilter}>
       <div className="relative mt-1 w-full max-w-[100px] z-[1]">

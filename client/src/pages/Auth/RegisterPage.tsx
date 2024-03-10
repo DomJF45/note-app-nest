@@ -1,7 +1,7 @@
 import { useState } from "react";
 import z from "zod";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "./Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +11,7 @@ import { iRegisterUser } from "../../types/user.types";
 import { registerUser } from "../../api/auth/auth.api";
 import toast from "react-hot-toast";
 
+// zod schema for registering user
 const schema = z.object({
   username: z.string().trim(),
   email: z.string().email().trim(),
@@ -18,9 +19,12 @@ const schema = z.object({
   confirmPass: z.string().trim(),
 });
 
+// apply schema type to useForm form
 type FormFields = z.infer<typeof schema>;
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
+  // toggles password view
   const [showPass, setShowPass] = useState<boolean>(false);
   const togglePass = () => {
     setShowPass((prev) => !prev);
@@ -28,18 +32,23 @@ export default function RegisterPage() {
   const Eye = showPass ? HiEyeOff : HiEye;
   const passType = showPass ? "text" : "password";
 
+  // register mutation for registering a user
   const registerMutation = useMutation(
     (data: iRegisterUser) => registerUser(data),
     {
       onSuccess: () => {
+        // if successful, redirect to /notes
         toast.success("Created account!");
+        navigate("/notes");
       },
       onError: () => {
+        // if error, display error in toast
         toast.error("Error creating account");
       },
     }
   );
 
+  // form state from useForm (react-hook-form)
   const {
     register,
     handleSubmit,
@@ -55,6 +64,7 @@ export default function RegisterPage() {
     resolver: zodResolver(schema),
   });
 
+  // checks if password = confirmPassword, then registers user
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     if (watch("password") !== watch("confirmPass")) return;
     // mutate register user

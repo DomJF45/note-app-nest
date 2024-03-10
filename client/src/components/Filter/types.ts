@@ -1,14 +1,8 @@
-import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { FunctionComponent } from "react";
 
-interface FilterBarProps {
-  noteFilter: string;
-  setNoteFilter: Dispatch<SetStateAction<string>>;
-}
+interface FilterBarProps {}
 
-interface FilterDropDownProps {
-  dateFilter: string;
-  setDateFilter: Dispatch<SetStateAction<string>>;
-}
+interface FilterDropDownProps {}
 
 export type FilterBarComponent = FunctionComponent<FilterBarProps>;
 export type FilterDropDownComponent = FunctionComponent<FilterDropDownProps>;

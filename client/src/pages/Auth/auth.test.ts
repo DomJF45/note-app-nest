@@ -1,6 +1,8 @@
 import { expect, suite, test } from "vitest";
 import { PASS_REGEX, USERNAME_REGEX } from "./constants";
 
+// tests regexs from ./constants
+
 suite("password validation", () => {
   test("password passes regex", () => {
     const password = "Password123!";

@@ -6,9 +6,11 @@ const image_url =
 //const image_url = "https://images.unsplash.com/photo-1709599226704-160351a268be?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 export default function AuthPage() {
+  // gets current url path
   const location = useLocation();
   const navigate = useNavigate();
 
+  // checks if route is not auth/register or auth/login and redirects if not
   useEffect(() => {
     if (location.pathname === "/auth/" || location.pathname === "/auth") {
       navigate("/");
