@@ -32,7 +32,7 @@ export default function AuthPage() {
         </h1>
         <p>Sign in and start saving notes</p>
       </div>
-      <div className="w-full md:w-2/3 flex flex-col px-12 items-center md:justify-center">
+      <div className="w-full md:w-2/3 flex flex-col px-12 items-center justify-center">
         <div className="flex sm:none">
           <h1 className="font-bold text-6xl w-full">
             Notes<span className="text-5xl text-pink-500">.</span>

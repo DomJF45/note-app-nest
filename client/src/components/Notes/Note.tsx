@@ -5,6 +5,7 @@ import useOutsideClick from "../../hooks/useOutsideClick";
 import { HiTrash, HiX } from "react-icons/hi";
 import { NoteContext } from "../../context/noteContext";
 import { iNoteContext } from "../../types/note.types";
+import { useAutoSizeTextarea } from "../../hooks/useAutosizeTextarea";
 
 /*
  * This component renders an individual note
@@ -27,6 +28,8 @@ const Note: NoteComponent = ({ note }) => {
 
   // update and delete functions passsed through NoteContext provider
   const { updateNote, deleteNote } = useContext(NoteContext)! as iNoteContext;
+
+  useAutoSizeTextarea({ textAreaRef: inputRef, value: note.content });
 
   // toggles edit mode
   const toggleEdit = (): void => {
@@ -61,7 +64,7 @@ const Note: NoteComponent = ({ note }) => {
     };
     updateNote(newNote);
     toggleEdit();
-    setNoteUpdate("");
+    setNoteUpdate(note.content);
   };
 
   // handler function for deleting the note
@@ -88,7 +91,7 @@ const Note: NoteComponent = ({ note }) => {
 
   return (
     <div
-      className="flex flex-col bg-white rounded-lg items-start justify-center h-max shadow-md"
+      className="flex flex-col bg-white rounded-lg items-start justify-center shadow-md"
       onMouseEnter={() => toggleDelete("on")}
       onMouseLeave={() => toggleDelete("off")}
     >
@@ -111,28 +114,34 @@ const Note: NoteComponent = ({ note }) => {
               autoFocus
               ref={inputRef}
               value={noteUpdate}
-              className="border-1 border-slate-300 rounded w-full h-full"
+              className="border-1 border-slate-300 rounded w-full"
               onChange={(e) => setNoteUpdate(e.currentTarget.value)}
+              maxLength={300}
             />
             <div className="flex gap-2 items-center">
-              <button
-                ref={buttonRef}
-                className="bg-emerald-500 text-white px-4 py-2 text-sm rounded"
-                onClick={handleUpdateNote}
-              >
-                Save
-              </button>
-              <button
-                className="hover:bg-black/10 p-1 rounded"
-                onClick={toggleEdit}
-              >
-                <HiX className="w-4 h-4" />
-              </button>
+              <div className="flex gap-2 items-center">
+                <button
+                  ref={buttonRef}
+                  className="bg-emerald-500 text-white px-4 py-2 text-sm rounded"
+                  onClick={handleUpdateNote}
+                >
+                  Save
+                </button>
+                <button
+                  className="hover:bg-black/10 p-1 rounded"
+                  onClick={toggleEdit}
+                >
+                  <HiX className="w-4 h-4" />
+                </button>
+              </div>
+              <p className="text-slate-600 text-xs">
+                {noteUpdate.length} / 300
+              </p>
             </div>
           </div>
         ) : (
           <h1
-            className="max-w-full break-wrap cursor-pointer hover:bg-black/10 rounded p-1"
+            className="max-w-full break-words cursor-pointer hover:bg-black/10 rounded p-1"
             onClick={toggleEdit}
           >
             {note.content}
