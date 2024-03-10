@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { iNote } from "../types/note.types";
 
+// Zustand store for note state management
+
+// define note state interface
+// state has values and actions
 interface NoteState {
   notes: iNote[];
   dateFilter: string;
@@ -12,6 +16,7 @@ interface NoteState {
   };
 }
 
+// create the note store, pass in default values
 export const useNoteStore = create<NoteState>((set) => ({
   notes: [],
   dateFilter: "DSC",
@@ -23,7 +28,11 @@ export const useNoteStore = create<NoteState>((set) => ({
   },
 }));
 
+// use atomic selectors to avoid access to all state
+
 export const useNotes = () => useNoteStore((state) => state.notes);
 export const useDateFilter = () => useNoteStore((state) => state.dateFilter);
 export const useNoteFilter = () => useNoteStore((state) => state.noteFilter);
+
+// export actions for destructuring
 export const useNoteActions = () => useNoteStore((state) => state.actions);

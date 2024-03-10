@@ -4,6 +4,10 @@ import { router } from "./router";
 import { queryClient } from "./queryClient";
 import { Toaster } from "react-hot-toast";
 
+/*
+ * This funciton takes providers and renders them with the router as children
+ * */
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

@@ -1,6 +1,10 @@
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 
+/*
+ * This is a function to render the nav on each react router component contained within the parent
+ * Outlet allows me to render routes almost like {children} props
+ * */
 export function WithNav() {
   return (
     <>

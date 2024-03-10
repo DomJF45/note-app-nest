@@ -1,10 +1,17 @@
 import { useNoteActions, useNoteFilter } from "../../store/note.store";
 import type { FilterBarComponent } from "./types";
 
-const FilterBar: FilterBarComponent = () => {
-  const noteFilter = useNoteFilter();
-  const { setNoteFilter } = useNoteActions();
+/*
+ * This component filters by note content
+ * It sets the state of notes in zustand store which renders out notes containing content in noteFilter
+ * */
 
+const FilterBar: FilterBarComponent = () => {
+  // grab note filter from note store
+  const noteFilter = useNoteFilter();
+  // grab setNoteFilter from note store actions
+  const { setNoteFilter } = useNoteActions();
+  // handler funciton for setting the note filter to value of input
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNoteFilter(e.currentTarget.value);
   };

@@ -1,3 +1,7 @@
+/*
+ * This component is a simple loading skeleton for a note
+ * */
+
 const Skeleton = () => {
   return (
     <div className="animate-pulse flex flex-col bg-slate-200 rounded items-start justify-center h-max shadow-md max-w-full h-[150px] gap-5">

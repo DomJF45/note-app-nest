@@ -6,21 +6,34 @@ import { HiTrash, HiX } from "react-icons/hi";
 import { NoteContext } from "../../context/noteContext";
 import { iNoteContext } from "../../types/note.types";
 
+/*
+ * This component renders an individual note
+ * It consumes the NoteContext contained in pages/notePage
+ * Notes component handles update and deletion of target note
+ * */
+
 const Note: NoteComponent = ({ note }) => {
+  // this refs are for defining the use outside click
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const trashRef = useRef<HTMLButtonElement>(null);
 
+  // state for accessing edit mode and showing editable field
   const [edit, setEdit] = useState<boolean>(false);
+  // state for showing delete button
   const [markDelete, setMarkDelete] = useState<boolean>(false);
+  // state for new note content
   const [noteUpdate, setNoteUpdate] = useState<string>(note.content);
 
+  // update and delete functions passsed through NoteContext provider
   const { updateNote, deleteNote } = useContext(NoteContext)! as iNoteContext;
 
+  // toggles edit mode
   const toggleEdit = (): void => {
     setEdit((prev) => !prev);
   };
 
+  // toggles visibility of delete button
   const toggleDelete = (state: "on" | "off"): void => {
     switch (state) {
       case "on":
@@ -31,12 +44,16 @@ const Note: NoteComponent = ({ note }) => {
     }
   };
 
+  // hook to manage if user clicks outside input ref.
+  // extended this to allow ref exceptions,
+  // this way clicking save, delete, or close will not automatically close edit mode
   useOutsideClick({
     targetRefs: [inputRef],
     exceptions: [buttonRef, trashRef],
     callback: toggleEdit,
   });
 
+  // handler function for updating the note
   const handleUpdateNote = () => {
     const newNote: iEditNote = {
       id: note.id,
@@ -47,22 +64,26 @@ const Note: NoteComponent = ({ note }) => {
     setNoteUpdate("");
   };
 
+  // handler function for deleting the note
   const handleDeleteNote = () => {
     deleteNote(note.id);
     toggleDelete("off");
     toggleEdit();
   };
 
+  // function to return text friendly date
   const getFormattedDate = () => {
     const created = new Date(note.dateCreated);
     const updated = new Date(note.dateEdited);
 
+    // if note was edited, put (updated) next to date
     if (created.getTime() < updated.getTime()) {
       return `${updated.toLocaleDateString()} (updated)`;
     }
     return created.toLocaleDateString();
   };
 
+  // get the formatted date
   const date = getFormattedDate();
 
   return (

@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import type { NavBarComponent } from "./types";
 import { useAuth } from "../../hooks/useAuth";
 
+/*
+ * This component renders a nav bar,
+ * it takes in both the user and logout function from the user store
+ * */
 const Navbar: NavBarComponent = () => {
   const { user, handleLogout } = useAuth();
   return (

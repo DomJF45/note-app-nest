@@ -6,6 +6,8 @@ import AuthPage from "./pages/Auth/AuthPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
 
+// router for application router
+
 export const router = createBrowserRouter([
   {
     path: "/",

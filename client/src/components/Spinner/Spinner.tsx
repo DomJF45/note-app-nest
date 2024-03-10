@@ -1,3 +1,5 @@
+// this component is a basic loading spinner
+
 export default function Spinner() {
   return (
     <div className="text-white">

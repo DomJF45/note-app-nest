@@ -3,12 +3,21 @@ import { HiPlusCircle, HiX } from "react-icons/hi";
 import { AddNoteComponent } from "./types";
 import { SubmitHandler, useForm } from "react-hook-form";
 
+/*
+ * This note handles rendering the form and hiding the form to add a new Note
+ * It takes in a handleAddNote function which will trigger the addnote mutation handler in pages/notes/hooks/noteCrud
+ * */
+
+// hook form validation
 type FormFields = {
   content: string;
 };
 
 const AddNote: AddNoteComponent = ({ handleAddNote }) => {
+  // state for new note value
   const [makeNewNote, setMakeNewNote] = useState<boolean>(false);
+
+  // hook form form state
   const {
     register,
     handleSubmit,
@@ -21,20 +30,27 @@ const AddNote: AddNoteComponent = ({ handleAddNote }) => {
     },
   });
 
+  // toggles new note input visibility
   const toggleNewNote = () => {
+    // resets state when open or close
     reset();
     setMakeNewNote((prev) => !prev);
   };
 
+  // handler function for adding note
   const handleAdd = (data: string) => {
+    // check if data is valid and exists
     if (data === "" || data === " ") {
       toggleNewNote();
       return;
     }
+    // add the new note through handler function passsed down from pages/notes/notePage
     handleAddNote(data);
+    // close the input
     toggleNewNote();
   };
 
+  // form submit function, takes in form data from FormFields
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     handleAdd(data.content);
   };

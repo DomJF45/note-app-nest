@@ -5,9 +5,18 @@ import { FilterDropDownComponent } from "./types";
 import { DATE_OPTIONS } from "./constants";
 import { useDateFilter, useNoteActions } from "../../store/note.store";
 
+/*
+ * This component filters notes by a date dropdown.
+ * It changes the dateFilter value in the notes store which updates the order of the note state
+ * */
+
 const FilterDropDown: FilterDropDownComponent = () => {
+  // grab dateFilter from note store
   const dateFilter = useDateFilter();
+  // grab setDateFilter from note store actions
   const { setDateFilter } = useNoteActions();
+
+  // tailwind headless ui component that takes in a getter and a setter, adjusts value based on options
   return (
     <Listbox value={dateFilter} onChange={setDateFilter}>
       <div className="relative mt-1 w-full max-w-[100px] z-[1]">
