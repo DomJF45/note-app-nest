@@ -23,7 +23,7 @@ Welcome to the project! This guide will help you set up and run the application 
    docker-compose up -d --build
    ```
 
-   If this command encounters issues, you can try running the server and client independently:
+3. If docker-compose does **NOT** work and encounters issues, you can try running the server and client independently:
 
    - Server:
      ```bash
