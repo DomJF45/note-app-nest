@@ -183,3 +183,21 @@ I containerized the application in Docker for a seamless hand-off and to make ru
   4. Developing _and learning_ NestJS
   5. Docker-compose (NestJS, React, Postgres)
   6. Building with Docker (NestJS and React)
+
+## Things I would Change
+
+- I enjoyed learning NestJS for this project, but I think for a small project NestJS is a little too complex. If I were to really have my ideal choice of tech stack, I would use Go as the backend server. Moreover, if the stack absolutely needed typescript, an Express application would have been easier to develop, debug, and deploy. However, I am thankful I learned NestJS and would recommended it for bigger projects with multiple developers. Once I overcame the learning curve developing modules was quite enjoyable.
+
+- If I could add more to this project, I would add the following:
+
+  1. Folders for notes and a directory sidebar
+  2. Categorizations of notes to filter and index
+  3. Rich text-editor for displaying rich text inside notes
+  4. User settings
+     - icon for user
+     - settings for user (CRUD)
+  5. OAuth support
+  6. Email validation
+  7. Dark mode
+
+- These features are far out of scope for this project, yet it would be interesting to implement.
