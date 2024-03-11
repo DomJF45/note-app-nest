@@ -35,6 +35,7 @@ export const useNoteCrud = (): iNoteCrud => {
   // add notes mutation
   const createNoteMutation = useMutation((data: string) => createNote(data), {
     onSuccess: () => {
+      queryClient.invalidateQueries("notes");
       toast.success("Note created");
     },
     onError: () => {
@@ -44,6 +45,7 @@ export const useNoteCrud = (): iNoteCrud => {
   // edit notes mutation
   const editNoteMutation = useMutation((data: iEditNote) => updateNote(data), {
     onSuccess: () => {
+      queryClient.invalidateQueries("notes");
       toast.success("Note edited");
     },
     onError: () => {
@@ -53,6 +55,7 @@ export const useNoteCrud = (): iNoteCrud => {
   // delete notes mutation
   const deleteNoteMutation = useMutation((id: number) => deleteNote(id), {
     onSuccess: () => {
+      queryClient.invalidateQueries("notes");
       toast.success("Note deleted");
     },
     onError: () => {
@@ -63,19 +66,16 @@ export const useNoteCrud = (): iNoteCrud => {
   // handler function to add note
   const handleAddNote = (data: string) => {
     createNoteMutation.mutate(data);
-    queryClient.invalidateQueries("notes");
   };
 
   // handler function to edit note
   const handleEditNote = (data: iEditNote) => {
     editNoteMutation.mutate(data);
-    queryClient.invalidateQueries("notes");
   };
 
   // handler function to delete note
   const handleDeleteNote = (id: number) => {
     deleteNoteMutation.mutate(id);
-    queryClient.invalidateQueries("notes");
   };
 
   // data query for notes

@@ -8,7 +8,6 @@ interface iNoteProps {
 // props for notes component
 interface iNotesProps {
   notes: iNote[];
-  loading?: boolean;
 }
 
 // props for add note component

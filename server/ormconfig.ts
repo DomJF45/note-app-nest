@@ -5,11 +5,11 @@ import * as fs from 'fs';
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
-  database: 'defaultdb',
-  host: 'db-postgresql-nyc3-61668-do-user-16031076-0.c.db.ondigitalocean.com',
-  port: 25060,
-  username: 'doadmin',
-  password: 'AVNS_h-zFGz1TG0x1_CWEqNa',
+  database: process.env.POSTGRES_DB,
+  host: process.env.POSTGRES_HOST,
+  port: +process.env.POSTGRES_PORT,
+  username: process.env.POSTGRES_USERNAME,
+  password: process.env.POSTGRES_PASSWORD,
   ssl: {
     ca: fs.readFileSync('./ca-certificate.crt').toString(),
   },

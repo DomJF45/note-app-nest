@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for notes-app-server on 2024-03-10T23:49:31-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'notes-app-server'
+primary_region = 'iad'
+
+[build]
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+[[env]]
+  POSTGRES_USERNAME="doadmin"
+  POSTGRES_PASSWORD="AVNS_h-zFGz1TG0x1_CWEqNa"
+  POSTGRES_HOST="db-postgresql-nyc3-61668-do-user-16031076-0.c.db.ondigitalocean.com"
+  POSTGRES_PORT="25060"
+  POSTGRES_DB="defaultdb"
