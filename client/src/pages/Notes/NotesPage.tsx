@@ -6,6 +6,7 @@ import { useNotes } from "../../store/note.store";
 import { useFilterNotes } from "./hooks/useFilterNotes";
 import { useNoteCrud } from "./hooks/useNoteCrud";
 import { useUser } from "../../store/user.store";
+import Skeleton from "../../components/Notes/Skeleton";
 
 /*
  * I like to keep all of my data fetching / manipulation on the top most component, in this case the Note Page component.
@@ -19,7 +20,7 @@ export default function NotesPage() {
 
   // hook that returns all queries and mutation functions related to Notes
   const {
-    queries: { data, isLoading },
+    queries: { data, isLoading, isError },
     handlers: { handleAddNote, handleEditNote, handleDeleteNote },
   } = useNoteCrud();
 
@@ -46,7 +47,9 @@ export default function NotesPage() {
             <AddNote handleAddNote={handleAddNote} />
           </div>
         </div>
-        <Notes notes={notes} loading={isLoading} />
+        {isLoading && <Skeleton />}
+        {data && <Notes notes={notes} />}
+        {isError && <p>Error loading notes</p>}
       </NoteContext.Provider>
     </NoteGuard>
   );

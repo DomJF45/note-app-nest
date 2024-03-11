@@ -71,7 +71,9 @@ const Note: NoteComponent = ({ note }) => {
   const handleDeleteNote = () => {
     deleteNote(note.id);
     toggleDelete("off");
-    toggleEdit();
+    if (edit) {
+      toggleEdit();
+    }
   };
 
   // function to return text friendly date

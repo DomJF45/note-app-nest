@@ -12,11 +12,16 @@ export async function getNotes(): Promise<iNote[]> {
   return res.data;
 }
 
-export async function createNote(note: string): Promise<void> {
+export async function createNote(note: string): Promise<iNote> {
   // grab token
   const token = getToken();
   // post note data
-  await axios.post(`${API_URL}/notes`, { content: note }, axiosOptions(token));
+  const res = await axios.post(
+    `${API_URL}/notes`,
+    { content: note },
+    axiosOptions(token)
+  );
+  return res.data;
 }
 
 export async function updateNote(note: iEditNote): Promise<void> {
