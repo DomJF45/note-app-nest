@@ -1,41 +1,80 @@
-# Instructions: How To Run
+# Project Setup and Deployment Guide
 
-`docker-compose up -d --build`
+Welcome to the project! This guide will help you set up and run the application using Docker Compose. If you encounter any issues, we've provided alternative steps to run the server, client, and database independently.
 
-if this doesn't work, you might have to run both server and client independently
-`cd client npm run dev --host` OR `yarn dev --host`
-`cd server npm run start:dev` OR `yarn start:dev`
-`docker run --rm \
-      --name postgres \
-      -e POSTGRES_PASSWORD=password123 \
-      -e POSTGRES_USER=postgres \
-      -e POSTGRES_DB=somedb \
-      -p 5432:5432 \
-      postgres`
-and set the env vars in server to `POSTGRES_USERNAME=postgres
-POSTGRES_PASSWORD=password123
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=somedb
-NODE_ENV=dev`
+## Prerequisites
 
-# Technical Details
+- [Docker](https://www.docker.com/get-started)
+- [Node.js](https://nodejs.org/) (for running the client and server independently)
+- [Yarn](https://yarnpkg.com/) (optional but recommended)
 
-- ## Stack
-  - **NestJS**, **React**, **Typescript**, **Tailwind**, **Postgres**
-- ## Dependencies
-  - ### Client
-    - **react-query**
-      - asynchronous state management for data fetching
-    - **zustand**
-      - small, lightweight state managment library. Better than Redux for this project due to lightweight and portability
-    - **Tailwindcss/forms**
-      - tailwind plugin that makes styling of forms easy
-    - **react-hook-form**
-      - library for attaching validation to state heavy forms
-    - **zod**
-      - library for schema validation and declaration
-    - **react-markdown**
-      - library for rendering markdown files into HTML (what you see here)
-    - **react-hot-toast**
-      - library for easy toast rendering
+## Instructions: How To Run
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. Run the following command to build and start the Docker containers:
+
+   ```bash
+   docker-compose up -d --build
+   ```
+
+   If this command encounters issues, you can try running the server and client independently:
+
+   - Server:
+     ```bash
+     cd server
+     yarn start:dev
+     ```
+   - Client:
+     ```bash
+     cd client
+     yarn dev --host
+     ```
+
+3. If you prefer running a standalone PostgreSQL container, use the following Docker command:
+
+   ```bash
+   docker run --rm \
+     --name postgres \
+     -e POSTGRES_PASSWORD=password123 \
+     -e POSTGRES_USER=postgres \
+     -e POSTGRES_DB=somedb \
+     -p 5432:5432 \
+     postgres
+   ```
+
+   Set the environment variables in the server to connect to the PostgreSQL container:
+
+   ```env
+   POSTGRES_USERNAME=postgres
+   POSTGRES_PASSWORD=password123
+   POSTGRES_HOST=postgres
+   POSTGRES_PORT=5432
+   POSTGRES_DB=somedb
+   NODE_ENV=dev
+   ```
+
+## Technical Details
+
+### Stack
+
+- **NestJS**, **React**, **Typescript**, **Tailwind**, **Postgres**
+
+### Dependencies
+
+#### Client
+
+- **react-query**: Asynchronous state management for data fetching.
+- **zustand**: Lightweight state management library, ideal for this project.
+- **Tailwindcss/forms**: Tailwind plugin for easy styling of forms.
+- **react-hook-form**: Library for attaching validation to state-heavy forms.
+- **zod**: Library for schema validation and declaration.
+- **react-markdown**: Library for rendering markdown files into HTML.
+- **react-hot-toast**: Library for easy toast rendering.
+
+Feel free to reach out if you encounter any issues or have further questions. Happy coding!
