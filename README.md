@@ -148,39 +148,38 @@ Another challange was deciding whether or not user authentication was the right 
 
 #### 1. NestJS dependencies
 
-    - A big, headache inducing problem I ran into was using Docker to build my NestJS application. NestJS was building perfectly fine in dev mode, but all the sudden broke down during the build. Why did this happen?
-
-    While reading documentation on NestJS, I installed several dependencies incorrectly as dev dependencies. NestJS would build, however it wouldn't map all of my controllers that were utilizing dependencies contained in  my dev dependency list in package.json. The solution to this, was to copy the default package.json file made by NestJS and replace all my dependencies. Then I called `npm install` and all was right. What was interetsting, is how NestJS successfully built, yet didn't notify me at all about any missing or unfound dependencies. At this point I was working in the dark with absolutely no error messages to help me out. To say it was a relief when I figured this out is an understatement.
+A big, headache inducing problem I ran into was using Docker to build my NestJS application. NestJS was building perfectly fine in dev mode, but all the sudden broke down during the build. Why did this happen?
+While reading documentation on NestJS, I installed several dependencies incorrectly as dev dependencies. NestJS would build, however it wouldn't map all of my controllers that were utilizing dependencies contained in my dev dependency list in package.json. The solution to this, was to copy the default package.json file made by NestJS and replace all my dependencies. Then I called `npm install` and all was right. What was interetsting, is how NestJS successfully built, yet didn't notify me at all about any missing or unfound dependencies. At this point I was working in the dark with absolutely no error messages to help me out. To say it was a relief when I figured this out is an understatement.
 
 #### 2. Docker - env
 
-    - I containerized the application in Docker for a seamless hand-off and to make running on different devices easy as possible. In doing so, I ran into some strange issues involving my ENV variables. While testing the initial Dockerfile in server/, I was not exporting my env file along with it. NestJS once again successfully built, but wasn't mapping my controllers similar to #1. Again, no error messages or any indication came from NestJS that my ENV variables were non-existent. Eventually, I figured out I had to export my .env file with my docker run command. Then the database was able to establish a connection and voila! My controllers were mapped.
+I containerized the application in Docker for a seamless hand-off and to make running on different devices easy as possible. In doing so, I ran into some strange issues involving my ENV variables. While testing the initial Dockerfile in server/, I was not exporting my env file along with it. NestJS once again successfully built, but wasn't mapping my controllers similar to #1. Again, no error messages or any indication came from NestJS that my ENV variables were non-existent. Eventually, I figured out I had to export my .env file with my docker run command. Then the database was able to establish a connection and voila! My controllers were mapped.
 
 #### 3. docker-compose
 
-    - After establishing that the Dockerfile in server/ worked, I created a docker-compose file at the root directory to orchestrate my Dockerfiles between client and server. I ran into a couple of minor issues that I was able to solve
-        - client/ was not running on my local machine, but was running in Docker. I had to set `host: true` in my vite.config
-        - server/ had trouble connecting to the development database but after adjusting `ssl` in ormconfig.ts I was able to toggle between the development and production build set in .env.
-        - client/ had no proxy set because I needed to specify the API_URL in services.client.environments in docker-compose
+- After establishing that the Dockerfile in server/ worked, I created a docker-compose file at the root directory to orchestrate my Dockerfiles between client and server. I ran into a couple of minor issues that I was able to solve
+  - client/ was not running on my local machine, but was running in Docker. I had to set `host: true` in my vite.config
+  - server/ had trouble connecting to the development database but after adjusting `ssl` in ormconfig.ts I was able to toggle between the development and production build set in .env.
+    - client/ had no proxy set because I needed to specify the API_URL in services.client.environments in docker-compose
 
 #### 4. Deploy server to Fly.io
 
-    - Deploying the server to Fly.io was pretty easy as I utilized the Dockerfile contained in server/.
+- Deploying the server to Fly.io was pretty easy as I utilized the Dockerfile contained in server/.
 
 #### 5. Deploy Postgres to Digital Ocean
 
-    - I ran into a couple of issues deploying and connecting to my Digital Ocean postgres host. This involved downloading a ca-certificate and setting { rejectUnauthorized: false } in orm.config. Additionally this was toggleable between dev and prod build set in .env
+- I ran into a couple of issues deploying and connecting to my Digital Ocean postgres host. This involved downloading a ca-certificate and setting { rejectUnauthorized: false } in orm.config. Additionally this was toggleable between dev and prod build set in .env
 
 #### 6. Deploy client to Vercel
 
-    - Deploying to vercel is very easy and intuitive. I did encounter an issue where I was pushing to prod from the client directory, but a new git commit to root would cause the app to rebuild and fail. I had to set a parent directory in the vercel project settings to client/. This was not a major issue and was easy to indentify and fix.
+- Deploying to vercel is very easy and intuitive. I did encounter an issue where I was pushing to prod from the client directory, but a new git commit to root would cause the app to rebuild and fail. I had to set a parent directory in the vercel project settings to client/. This was not a major issue and was easy to indentify and fix.
 
 #### Overall
 
-    - Overall, the biggest challenge of this application was learning NestJS, and building the project with Docker. I've been doing front-end engineering for years so by far the easist part was developing the client. I will rank each challange by least challenging to most challenging:
-        1. Developing the client (React)
-        2. Deploying the client (Vercel)
-        5. Deploying the server (Fly.io)
-        6. Developing _and learning_ NestJS
-        7. Docker-compose (NestJS, React, Postgres)
-        7. Building with Docker (NestJS and React)
+- Overall, the biggest challenge of this application was learning NestJS, and building the project with Docker. I've been doing front-end engineering for years so by far the easist part was developing the client. I will rank each challange by least challenging to most challenging:
+  1. Developing the client (React)
+  2. Deploying the client (Vercel)
+  3. Deploying the server (Fly.io)
+  4. Developing _and learning_ NestJS
+  5. Docker-compose (NestJS, React, Postgres)
+  6. Building with Docker (NestJS and React)
