@@ -13,8 +13,8 @@ Welcome to the project! This guide will help you set up and run the application 
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/DomJF45/note-app-nest.git
+   cd note-app-nest
    ```
 
 2. Run the following command to build and start the Docker containers:
@@ -31,12 +31,13 @@ Welcome to the project! This guide will help you set up and run the application 
      yarn start:dev
      ```
    - Client:
+
      ```bash
      cd client
      yarn dev --host
      ```
 
-3. If you prefer running a standalone PostgreSQL container, use the following Docker command:
+   - Standalone Postgres container:
 
    ```bash
    docker run --rm \
