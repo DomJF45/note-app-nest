@@ -9,7 +9,7 @@ I implemented user authentication for this application.
 - Feel free to either make your own account through the route `auth/register` by clicking `login` and `signup`
 - If you don't want to make an account, use the following test credentials to log in.
   - **email**: _test@test.com_
-  - **password**: _password_
+  - **password**: _Password123!_
 
 ### Notes
 

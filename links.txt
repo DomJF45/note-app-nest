@@ -1,0 +1,2 @@
+GITHUB: https://github.com/DomJF45/note-app-nest
+APP: https://note-app-nine-ebon.vercel.app/
