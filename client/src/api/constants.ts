@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 // API proxy defined in vite config
-export const API_URL = "/api";
+export const API_URL = import.meta.env.VITE_REACT_APP_API_ENDPOINT;
 
 // function to grab token from storage and throw an error if it does not exist
 export const getToken = (): string => {
