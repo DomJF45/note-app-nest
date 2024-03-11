@@ -26,3 +26,4 @@ primary_region = 'iad'
   POSTGRES_HOST="db-postgresql-nyc3-61668-do-user-16031076-0.c.db.ondigitalocean.com"
   POSTGRES_PORT="25060"
   POSTGRES_DB="defaultdb"
+  NODE_ENV="production"

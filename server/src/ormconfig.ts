@@ -4,9 +4,10 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   port: +process.env.POSTGRES_PORT,
