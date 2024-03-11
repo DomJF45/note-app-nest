@@ -39,26 +39,26 @@ Welcome to the project! This guide will help you set up and run the application 
 
    - Standalone Postgres container:
 
-   ```bash
-   docker run --rm \
-     --name postgres \
-     -e POSTGRES_PASSWORD=password123 \
-     -e POSTGRES_USER=postgres \
-     -e POSTGRES_DB=somedb \
-     -p 5432:5432 \
-     postgres
-   ```
+     ```bash
+     docker run --rm \
+       --name postgres \
+       -e POSTGRES_PASSWORD=password123 \
+       -e POSTGRES_USER=postgres \
+       -e POSTGRES_DB=somedb \
+       -p 5432:5432 \
+       postgres
+     ```
 
-   Set the environment variables in the server to connect to the PostgreSQL container:
+     Set the environment variables in the server to connect to the PostgreSQL container:
 
-   ```env
-   POSTGRES_USERNAME=postgres
-   POSTGRES_PASSWORD=password123
-   POSTGRES_HOST=postgres
-   POSTGRES_PORT=5432
-   POSTGRES_DB=somedb
-   NODE_ENV=dev
-   ```
+     ```env
+     POSTGRES_USERNAME=postgres
+     POSTGRES_PASSWORD=password123
+     POSTGRES_HOST=postgres
+     POSTGRES_PORT=5432
+     POSTGRES_DB=somedb
+     NODE_ENV=dev
+     ```
 
 ## Technical Details
 
