@@ -1,6 +1,6 @@
 # Project Setup and Deployment Guide
 
-Welcome to the project! This guide will help you set up and run the application using Docker Compose. If you encounter any issues, we've provided alternative steps to run the server, client, and database independently.
+Welcome to the notes project! This guide will help you set up and run the application using Docker Compose. If you encounter any issues, I've provided alternative steps to run the server, client, and database independently.
 
 ## Prerequisites
 
