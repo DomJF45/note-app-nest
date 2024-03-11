@@ -18,8 +18,7 @@ import { User } from '../user/user.entity';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  providers: [AuthService, UsersService, JwtService],
   controllers: [AuthController],
-  exports: [AuthService],
+  providers: [AuthService, UsersService, JwtService],
 })
 export class AuthModule {}

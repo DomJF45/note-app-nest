@@ -1,7 +1,5 @@
-node_modules
-test
-.gitignore
-.git
-.prettierrc
 Dockerfile
-README.md
+.dockerignore
+node_modules
+npm-debug.log
+dist
