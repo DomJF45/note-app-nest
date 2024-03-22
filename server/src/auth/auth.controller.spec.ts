@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../user/dto/createUser.dto';
+import { CreateUserDto, LoginUserDto } from '../user/dto/createUser.dto';
 import { User } from '../user/user.entity';
 import { CanActivate } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
@@ -35,8 +35,7 @@ describe('AuthController', () => {
 
   describe('login', () => {
     it('should return user and token on successful login', async () => {
-      const createUserDto: CreateUserDto = {
-        username: 'coolperson20',
+      const loginUser: LoginUserDto = {
         email: 'test@example.com',
         password: 'password',
       };
@@ -56,7 +55,7 @@ describe('AuthController', () => {
         .spyOn(authService, 'login')
         .mockImplementation(async () => ({ user: mockUser, token: 'token' }));
 
-      const result = await authController.login(createUserDto);
+      const result = await authController.login(loginUser);
       expect(result).toEqual({ user: mockUser, token: 'token' });
     });
   });

@@ -14,6 +14,7 @@ import { Note } from './note.entity';
 import { CreateNoteDto, EditNoteDto } from './dto/createNote.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { AuthService } from '../auth/auth.service';
+
 @Controller('notes')
 export class NotesController {
   constructor(

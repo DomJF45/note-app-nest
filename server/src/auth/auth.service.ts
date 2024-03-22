@@ -4,11 +4,12 @@ import { User } from '../user/user.entity';
 import { UsersService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/createUser.dto';
 import { jwtConstants } from './constants';
+import { UserCreatedEvent } from 'src/user/events/user-created.event';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
@@ -40,7 +41,7 @@ export class AuthService {
   }
 
   async register(user: CreateUserDto): Promise<{ user: User; token: string }> {
-    return this.usersService.register(user);
+    return await this.usersService.register(user);
   }
 
   async get(id: number): Promise<{ user: User }> {

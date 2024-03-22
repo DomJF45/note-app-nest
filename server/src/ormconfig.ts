@@ -7,7 +7,7 @@ const config: PostgresConnectionOptions = {
   ssl:
     process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: false }
-      : false,
+      : { rejectUnauthorized: false },
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   port: +process.env.POSTGRES_PORT,
