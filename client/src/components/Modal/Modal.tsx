@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Dispatch, useState, SetStateAction, Fragment } from "react";
+import { Dispatch, SetStateAction, Fragment } from "react";
 
 interface ModalProps {
   isOpen: boolean;
