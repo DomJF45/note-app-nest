@@ -6,10 +6,14 @@ import {
   Delete,
   Param,
   Body,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/createUser.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -22,6 +26,18 @@ export class UsersController {
       throw new Error('User not found');
     } else {
       return user;
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get()
+  async find(): Promise<User[]> {
+    const users = await this.usersService.findall();
+    if (!users) {
+      throw new Error('Cannot get users');
+    } else {
+      return users;
     }
   }
 

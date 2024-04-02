@@ -1,13 +1,13 @@
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { Note } from './notes/note.entity';
 import { User } from './user/user.entity';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
   ssl:
     process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: false }
-      : { rejectUnauthorized: false },
+      : false,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   port: +process.env.POSTGRES_PORT,

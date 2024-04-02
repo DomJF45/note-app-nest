@@ -1,11 +1,19 @@
 import { useContext, useRef, useState } from "react";
 import type { NoteComponent } from "./types";
 import type { iEditNote } from "../../types/note.types";
+import toast from "react-hot-toast";
 import useOutsideClick from "../../hooks/useOutsideClick";
-import { HiTrash, HiX } from "react-icons/hi";
+import { HiTrash, HiX, HiOutlineShare } from "react-icons/hi";
+import { MdPeople } from "react-icons/md";
 import { NoteContext } from "../../context/noteContext";
-import { iNoteContext } from "../../types/note.types";
+import type { iNoteContext } from "../../types/note.types";
+import type { iUser } from "../../types/user.types";
 import { useAutoSizeTextarea } from "../../hooks/useAutosizeTextarea";
+import { Modal } from "../Modal/Modal";
+import { useMutation, useQuery } from "react-query";
+import { getUsers } from "../../api/users/users.api";
+import { linkNote } from "../../api/notes/notes.api";
+import { queryClient } from "../../queryClient";
 
 /*
  * This component renders an individual note
@@ -21,6 +29,9 @@ const Note: NoteComponent = ({ note }) => {
 
   // state for accessing edit mode and showing editable field
   const [edit, setEdit] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [users, setUsers] = useState<iUser[]>([]);
+  const [selectedUser, setSelectedUser] = useState<number>();
   // state for showing delete button
   const [markDelete, setMarkDelete] = useState<boolean>(false);
   // state for new note content
@@ -56,6 +67,23 @@ const Note: NoteComponent = ({ note }) => {
     callback: toggleEdit,
   });
 
+  useQuery(["userList"], getUsers, {
+    onSuccess: (data: iUser[]) => {
+      setUsers(data);
+    },
+  });
+
+  const mutation = useMutation(
+    (data: { noteid: number; userid: number }) =>
+      linkNote(data.noteid, data.userid),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("notes");
+        toast.success("Note linked");
+      },
+    }
+  );
+
   // handler function for updating the note
   const handleUpdateNote = () => {
     const newNote: iEditNote = {
@@ -76,6 +104,10 @@ const Note: NoteComponent = ({ note }) => {
     }
   };
 
+  const handleLink = () => {
+    mutation.mutate({ noteid: note.id, userid: selectedUser! });
+  };
+
   // function to return text friendly date
   const getFormattedDate = () => {
     const created = new Date(note.dateCreated);
@@ -91,6 +123,8 @@ const Note: NoteComponent = ({ note }) => {
   // get the formatted date
   const date = getFormattedDate();
 
+  console.log(note);
+
   return (
     <div
       className="flex flex-col bg-white rounded-lg items-start justify-center shadow-md"
@@ -99,17 +133,30 @@ const Note: NoteComponent = ({ note }) => {
     >
       <div className="flex flex-col gap-2 p-3 w-full">
         <div className="flex text-slate-600 text-sm p-1 justify-between">
-          <p>{date}</p>
-          <button
-            ref={trashRef}
-            className={`${
-              markDelete ? "visible" : "hidden"
-            } w-4 h-4 cursor-pointer hover:scale-[1.1] transition-2 ease`}
-            onClick={handleDeleteNote}
-          >
-            <HiTrash />
-          </button>
+          <div className="flex items-center gap-2">
+            <p>{date}</p>
+            {note.sharedUser !== null && <MdPeople />}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              ref={trashRef}
+              className={`${
+                markDelete ? "visible" : "hidden"
+              } w-4 h-4 cursor-pointer hover:scale-[1.1] transition-2 ease`}
+              onClick={handleDeleteNote}
+            >
+              <HiTrash />
+            </button>
+            <button
+              ref={trashRef}
+              className={`w-4 h-4 cursor-pointer hover:scale-[1.1] transition-2 ease`}
+              onClick={() => setIsOpen((prev) => !prev)}
+            >
+              <HiOutlineShare />
+            </button>
+          </div>
         </div>
+
         {edit ? (
           <div className="border-1 border-slate-300 rounded text-sm">
             <textarea
@@ -142,12 +189,29 @@ const Note: NoteComponent = ({ note }) => {
             </div>
           </div>
         ) : (
-          <h1
-            className="max-w-full break-words cursor-pointer hover:bg-black/10 rounded p-1"
-            onClick={toggleEdit}
-          >
-            {note.content}
-          </h1>
+          <>
+            <h1
+              className="max-w-full break-words cursor-pointer hover:bg-black/10 rounded p-1"
+              onClick={toggleEdit}
+            >
+              {note.content}
+            </h1>
+            <div className="w-[300px]">
+              <Modal isOpen={isOpen} title="Link User" setIsOpen={setIsOpen}>
+                <div className="flex flex-col">
+                  <label>Link User</label>
+                  <select
+                    onChange={(e) => setSelectedUser(+e.currentTarget.value)}
+                  >
+                    {users.map((user) => (
+                      <option value={user.id}>{user.username}</option>
+                    ))}
+                  </select>
+                  <button onClick={handleLink}>Link</button>
+                </div>
+              </Modal>
+            </div>
+          </>
         )}
       </div>
     </div>

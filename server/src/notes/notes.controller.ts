@@ -8,6 +8,8 @@ import {
   Body,
   UseGuards,
   Put,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { Note } from './note.entity';
@@ -38,7 +40,18 @@ export class NotesController {
     return this.notesService.create(note, user);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(AuthGuard)
+  @Post(':id/link')
+  async linkNote(
+    @Param('id') id: number,
+    @Body() body: { userid: number },
+  ): Promise<Note> {
+    return await this.notesService.linkUser(id, body.userid);
+  }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAllByUserId(@Request() req): Promise<Note[]> {
     const token = req.headers.authorization.split(' ')[1];
