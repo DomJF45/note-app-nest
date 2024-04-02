@@ -20,6 +20,9 @@ export class User {
   @OneToMany(() => Note, (note) => note.user)
   notes: Note[];
 
+  @OneToMany(() => Note, (note) => note.sharedUser)
+  sharedNotes: Note[];
+
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
   }

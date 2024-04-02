@@ -18,6 +18,10 @@ export class Note {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @ManyToOne(() => User, (user) => user.sharedNotes)
+  @JoinColumn({ name: 'sharedUser' })
+  sharedUser: User;
+
   @Column()
   content: string;
 

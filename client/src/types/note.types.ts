@@ -2,12 +2,15 @@
  * Shared note types file so that note types aren't contained in either pages/ or components/ since both need access
  */
 
+import { iUser } from "./user.types";
+
 // the note takes id, content, date created, and date edited
 export interface iNote {
   id: number;
   content: string;
   dateCreated: Date;
   dateEdited: Date;
+  sharedUser: Omit<iUser, "password">;
 }
 
 // type for editing notes

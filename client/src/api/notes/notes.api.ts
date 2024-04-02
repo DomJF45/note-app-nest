@@ -24,6 +24,17 @@ export async function createNote(note: string): Promise<iNote> {
   return res.data;
 }
 
+export async function linkNote(noteid: number, userid: number): Promise<iNote> {
+  const token = getToken();
+  const res = await axios.post(
+    `${API_URL}/notes/${noteid}/link`,
+    { userid },
+    axiosOptions(token)
+  );
+
+  return res.data;
+}
+
 export async function updateNote(note: iEditNote): Promise<void> {
   // grab token
   const token = getToken();
